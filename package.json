@@ -1,0 +1,29 @@
+{
+  "name": "mutably",
+  "version": "0.0.2",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "debug": "node-debug server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "jlopker",
+  "license": "ISC",
+  "bugs": {
+    "url": "/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.2",
+    "cors": "^2.7.1",
+    "ejs": "^2.3.4",
+    "express": "^4.13.1",
+    "mongoose": "^4.0.7"
+  },
+  "devDependencies": {
+    "node-inspector": "0.12.3"
+  }
+}
