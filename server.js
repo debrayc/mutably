@@ -27,12 +27,29 @@ mongoose.connect(
 
 // require models and seed data
 var Book = require('./models/book'),
-    // Wine = require('./models/wine'),
     Pokemon = require('./models/pokemon'),
+    Album = require('./models/album'),
     seedBooks = require('./seeds/books'),
-    // seedWines = require('./seeds/wines'),
-    seedPokemon = require('./seeds/pokemon');
+    seedPokemon = require('./seeds/pokemon'),
+    seedAlbum = require('./seeds/album');
 
+/*
+ * Get a single response object and 404 if it isn't found.
+ * @param err {Object} Error reported from Mongo.
+ * @param foundObject {Object} An Object found by Mongo.
+ * @this Express Response Object
+ */
+function getSingularResponse (err, foundObject) {
+  if (err) {
+    this.status(500).json({ error: err.message });
+  } else {
+    if (foundObject === null) {
+      this.status(404).json({ error: "Nothing found by this ID." });
+    } else {
+      this.status(200).json(foundObject);
+    }
+  }
+}
 
 // API ROUTES
 
@@ -66,25 +83,6 @@ app.post('/books', function (req, res) {
     }
   });
 });
-
-
-/*
- * Get a single response object and 404 if it isn't found.
- * @param err {Object} Error reported from Mongo.
- * @param foundObject {Object} An Object found by Mongo.
- * @this Express Response Object
- */
-function getSingularResponse (err, foundObject) {
-  if (err) {
-    this.status(500).json({ error: err.message });
-  } else {
-    if (foundObject === null) {
-      this.status(404).json({ error: "Nothing found by this ID." });
-    } else {
-      this.status(200).json(foundObject);
-    }
-  }
-}
 
 app.get('/books/:id', function (req, res) {
   // get book id from url params (`req.params`)
@@ -206,6 +204,81 @@ app.delete('/pokemon/:id', function (req, res) {
 });
 
 
+/*
+ * ALBUM API ENDPOINTS
+ */
+
+// get all albums
+app.get('/albums', function (req, res) {
+  // find all albums in db
+  Album.find(function (err, allAlbums) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.json({ albums: allAlbums });
+    }
+  });
+});
+
+// create new album
+app.post('/albums', function (req, res) {
+  // create new album with form data (`req.body`)
+  var newAlbum = new Album(req.body);
+
+  // save new album in db
+  newAlbum.save(function (err, savedAlbum) {
+    if (err) {
+      res.status(500).json({ error: err.message });
+    } else {
+      res.status(201).json(savedAlbum);
+    }
+  });
+});
+
+app.get('/albums/:id', function (req, res) {
+  // get album id from url params (`req.params`)
+  var albumId = req.params.id;
+
+  // find album in db by id
+  Album.findOne({ _id: albumId }, getSingularResponse.bind(res));
+});
+
+// update album
+app.put('/albums/:id', function (req, res) {
+  // get album id from url params (`req.params`)
+  var albumId = req.params.id;
+
+  // find album in db by id
+  Album.findOne({ _id: albumId }, function (err, foundAlbum) {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (!foundAlbum){
+     return res.status(404).json({ error: "Nothing found by this ID." });
+    }
+
+    // update the albums's attributes
+    foundAlbum.artistName = req.body.artistName;
+    foundAlbum.name = req.body.name;
+    foundAlbum.releaseDate = req.body.releaseDate;
+    foundAlbum.genres = req.body.genres;
+
+    // save updated album in db
+    foundAlbum.save(getSingularResponse.bind(res));
+
+  });
+});
+
+// delete album
+app.delete('/albums/:id', function (req, res) {
+  // get album id from url params (`req.params`)
+  var albumId = req.params.id;
+
+  // find album in db by id and remove
+  Album.findOneAndRemove({ _id: albumId }, getSingularResponse.bind(res));
+});
+
 // HOME & RESET ROUTES
 
 app.get('/', function (req, res) {
@@ -221,11 +294,15 @@ app.post('/reset', function (req, res) {
     Book.create(seedBooks, function (err, createdBooks) {
       Pokemon.remove({}, function (err, removedPokemons) {
         Pokemon.create(seedPokemon, function (err, createdPokemons) {
-          if (req.params.format === 'json') {
-            res.status(201).json(createdBooks.concat(createdWines).concat(createdPokemons));
-          } else {
-            res.redirect('/');
-          }
+          Album.remove({}, function (err, removedAlbums) {
+            Album.create(seedAlbum, function (err, createdAlbums) {
+              if (req.params.format === 'json') {
+                res.status(201).json(createdBooks.concat(createdWines).concat(createdPokemons));
+              } else {
+                res.redirect('/');
+              }
+            });
+          });
         });
       });
     });
