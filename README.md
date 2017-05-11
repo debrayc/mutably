@@ -4,6 +4,11 @@
 
 [https://mutably.herokuapp.com](https://mutably.herokuapp.com)
 
+## Resources
+1. `books`
+1. `pokemon`
+1. `albums`
+
 ## Books Endpoint
 
 | Request | URL | Action |
@@ -71,6 +76,50 @@ GET `/pokemon`
       "pokedex": "003",
       "evolves_from": "Ivysaur",
       "image": "https://upload.wikimedia.org/wikipedia/en/d/dd/1200px-003Venusaur.png"
+    }
+  ]
+}
+```
+
+## Albums Endpoint
+
+| Request | URL | Action |
+| :--- | :--- | :--- |
+| GET | `/albums` | READS all albums |
+| POST | `/albums` | CREATES new album |
+| GET | `/albums/:id` | READS one album |
+| PUT | `/albums/:id` | UPDATES one album |
+| DELETE | `/albums/:id` | DELETES one album |
+
+#### Sample Response
+
+GET `/albums`
+
+```js
+{
+  albums: [
+    {
+      _id: "58f16c62903fce7457f5195d",
+      artistName: "Ladyhawke",
+      name: "Ladyhawke",
+      releaseDate: "2008, November 18",
+      __v: 0,
+      genres: [
+        "new wave",
+        "indie rock",
+        "synth pop"
+      ]
+    },
+    {
+      _id: "58f16c62903fce7457f51961",
+      artistName: "Anderson .Paak",
+      name: "Malibu",
+      releaseDate: "2016, January 15",
+      __v: 0,
+      genres: [
+        "hip hop",
+        "neo soul"
+      ]
     }
   ]
 }
