@@ -1,9 +1,17 @@
 // require express and other modules
-var express = require('express'),
-    app = express(),
-    cors = require('cors'),
-    bodyParser = require('body-parser'),
-    mongoose = require('mongoose');
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
+//const  mongoose = require('mongoose')
+const app = express()
+
+// require models and seed data
+const Book = require('./models/book')
+const Pokemon = require('./models/pokemon')
+const Album = require('./models/album')
+const seedBooks = require('./seeds/books')
+const seedPokemon = require('./seeds/pokemon')
+const seedAlbum = require('./seeds/album')
 
 // configure cors (for allowing cross-origin requests)
 app.use(cors());
@@ -18,20 +26,14 @@ app.use(express.static(__dirname + '/public'));
 // set view engine to ejs
 app.set('view engine', 'ejs');
 
-// connect to mongodb
-mongoose.connect(
-  process.env.MONGODB_URI ||
-  process.env.MONGOHQ_URL ||
-  'mongodb://localhost/mutably'
-);
+// // connect to mongodb
+// mongoose.connect(
+//   process.env.MONGODB_URI ||
+//   process.env.MONGOHQ_URL ||
+//   'mongodb://localhost/mutably'
+// );
 
-// require models and seed data
-var Book = require('./models/book'),
-    Pokemon = require('./models/pokemon'),
-    Album = require('./models/album'),
-    seedBooks = require('./seeds/books'),
-    seedPokemon = require('./seeds/pokemon'),
-    seedAlbum = require('./seeds/album');
+
 
 /*
  * Get a single response object and 404 if it isn't found.
@@ -39,6 +41,7 @@ var Book = require('./models/book'),
  * @param foundObject {Object} An Object found by Mongo.
  * @this Express Response Object
  */
+
 function getSingularResponse (err, foundObject) {
   if (err) {
     this.status(500).json({ error: err.message });
@@ -312,5 +315,5 @@ app.post('/reset', function (req, res) {
 
 // listen on port (production or localhost)
 app.listen(process.env.PORT || 3000, function() {
-  console.log('server started');
+  console.log('server started @ 3000');
 });

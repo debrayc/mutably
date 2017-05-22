@@ -9,18 +9,20 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/debrayc/mutably.git"
   },
-  "author": "jlopker",
+  "author": "Aaron Villanueva",
   "license": "ISC",
   "bugs": {
-    "url": "/issues"
+    "url": "https://github.com/debrayc/mutably.git/issues"
   },
   "dependencies": {
     "body-parser": "^1.13.2",
     "cors": "^2.7.1",
     "ejs": "^2.3.4",
-    "express": "^4.13.1",
+    "express": "^4.15.3",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.10",
     "mongoose": "^4.0.7"
   },
   "devDependencies": {
