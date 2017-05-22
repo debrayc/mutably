@@ -21,9 +21,9 @@
     "cors": "^2.7.1",
     "ejs": "^2.3.4",
     "express": "^4.15.3",
-    "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.10",
-    "mongoose": "^4.0.7"
+    "mongoose": "^4.10.1",
+    "node": "^7.7.4",
+    "npm": "^3.10.10"
   },
   "devDependencies": {
     "node-inspector": "0.12.3"
