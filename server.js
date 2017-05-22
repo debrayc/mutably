@@ -50,6 +50,7 @@ function getSingularResponse (err, foundObject) {
       this.status(404).json({ error: "Nothing found by this ID." });
     } else {
       this.status(200).json(foundObject);
+      return
     }
   }
 }
@@ -67,7 +68,7 @@ app.get('/books', function (req, res) {
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
-      res.json({ books: allBooks });
+      res.render('books')
     }
   });
 });
@@ -85,6 +86,7 @@ app.post('/books', function (req, res) {
       res.status(201).json(savedBook);
     }
   });
+  res.render('books')
 });
 
 app.get('/books/:id', function (req, res) {
